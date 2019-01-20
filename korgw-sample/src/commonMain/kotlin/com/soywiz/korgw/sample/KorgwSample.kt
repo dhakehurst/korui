@@ -60,7 +60,7 @@ class KCube {
     fun run() = Korio {
         DefaultGameWindow.loop {
             //TODO: why can't I use width and height vars here ?
-            configure(400, 400, "Multicolored cube", fullscreen = false)
+            configure(this@KCube.width, this@KCube.height, "Multicolored cube", fullscreen = false)
             addEventListener<ReshapeEvent> {
                 reshape(it, ag)
             }
@@ -77,7 +77,7 @@ class KCube {
             height = 1
         ar = (width.toFloat() / height.toFloat())
         ag.setViewport(0, 0, width, height)
-        projMat = Matrix3D().setToPerspective(aov, ar, near, far)
+        projMat.setToPerspective(aov, ar, near, far)
     }
 
     fun render(ag: AG) {
@@ -85,7 +85,7 @@ class KCube {
 
         modlMat = Matrix3D().identity().setToRotation(rquad, rotAxis);
 
-        val points = mutableListOf<Float>()
+        val points = floatArrayListOf()
         points += drawCube()
         ag.createVertexBuffer(points.toFloatArray()).use { vertices ->
             ag.draw(
@@ -103,12 +103,12 @@ class KCube {
             )
         }
 
-        rquad = rquad.plus(Angle.fromDegrees(0.15))
+        rquad += 0.15.degrees
 
     }
 
-    fun drawCube(): List<Float> {
-        return listOf(
+    fun drawCube(): FloatArrayList {
+        return floatArrayListOf(
             -cubeSize, -cubeSize, -cubeSize,  1f, 0f, 0f,  //p1
             -cubeSize, -cubeSize, +cubeSize,  1f, 0f, 0f,  //p2
             -cubeSize, +cubeSize, +cubeSize,  1f, 0f, 0f,  //p3
